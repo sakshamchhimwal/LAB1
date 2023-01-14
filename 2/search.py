@@ -87,12 +87,49 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+    from game import Directions
+    n = Directions.NORTH
+    e = Directions.EAST
+    s = Directions.SOUTH
+    w = Directions.WEST
+    opQueue=util.Queue()
+    checked=set()
+    mapDict = {}
+    goalState=()
+    isFound=0
+    opQueue.push(problem.getStartState())
+    while(not opQueue.isEmpty()):
+        state = opQueue.pop()
+        checked.add(state)
+        for i in problem.getSuccessors(state):
+            if(not i[0] in checked):
+                opQueue.push(i[0])
+                mapDict[i[0]]=state
+            if(problem.isGoalState(i[0])):
+                isFound=1
+                goalState=i[0]
+                break
+        if(isFound==1):
+            break
+    backTrackArr=[]
+    while(goalState!=problem.getStartState()):
+        diff1=goalState[0]-mapDict[goalState][0]
+        diff2=goalState[1]-mapDict[goalState][1]
+        goalState=mapDict[goalState]
+        if(diff1>0):
+            backTrackArr.append(e)
+        elif(diff1<0):
+            backTrackArr.append(w)
+        elif(diff2>0):
+            backTrackArr.append(n)
+        elif(diff2<0):
+            backTrackArr.append(s)
+    return backTrackArr[::-1]
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
